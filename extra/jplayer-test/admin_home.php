@@ -1,4 +1,9 @@
 <?php
+session_start();
+$username=$_SESSION['username'];
+if($username!='admin'){
+	echo "<script>location='test3.php';</script>";
+}
 $con = mysqli_connect("localhost","root","") or die("Cannot connect to server.");
 mysqli_select_db($con,"music") or die("Cannot Connect to db");
 
@@ -11,6 +16,7 @@ if(mysqli_query($con,"SELECT COUNT(*) FROM `songs`")){
 $fetch_qry="SELECT * FROM `songs`";
 $fetch_data=mysqli_query($con,$fetch_qry);
 ?>
+<script>var quelen=-1</script>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -68,16 +74,24 @@ $fetch_data=mysqli_query($con,$fetch_qry);
       $('#btn-api-showPlaylist').on('click', function(){ jpjb.showPlaylist(); });
       $('#btn-api-showPlaylist-false').on('click', function(){ jpjb.showPlaylist(false); });
 	  
-	  
    });
-   function add_to_queue(title,link,artist,album_art){
+   function add_to_queue(title,link,artist,album_art,play){
 		  var jpjb=window.jpjb;
+		  if(quelen==-1){
+			  jpjb.clear();
+		  }
 		  jpjb.add({
 			  title: title,
 			  artist: artist,
 			  mp3: link,
+			  poster: album_art
 		  });
-		  document.body.style="background:url("+album_art+") no-repeat fixed;background-size:100%;";
+		  document.body.style="background:url("+album_art+") fixed;background-size:100%;";
+		  quelen+=1;
+		  if(play==1){
+			jpjb.select(quelen);
+			jpjb.play();
+		  }	
 	  }
 	function play(title,link,artist){
 		var jpjb=window.jpjb;
@@ -90,42 +104,13 @@ $fetch_data=mysqli_query($con,$fetch_qry);
 <article>
 
 
-<p>
-<a href="media/wav.wav" title="" data-artist="Lucas Gonze">.WAV file</a><br />
-<a href="media/mp3.mp3" title="" data-artist="Lucas Gonze" data-image="media/cover1.jpg" data-download="1" data-buy="https://www.freesound.org/people/lucasgonze/sounds/58970/">.MP3 file</a><br />
-<a href="media/ogg.ogg" title="" data-artist="Lucas Gonze">.OGG file</a><br />
-<a href="media/xspf.xspf">.XSPF file</a><br />
-<a href="media/xspf.xml" type="application/xspf+xml">.XML file in XSPF format</a>
-</p>
-
-
-<h2>API Demo</h2>
-
-<a id="btn-api-select-1" href="javascript:;">select(1)</a> |
-<a id="btn-api-play" href="javascript:;">play()</a> |
-<a id="btn-api-play-1" href="javascript:;">play(1)</a> |
-<a id="btn-api-pause" href="javascript:;">pause()</a> |
-<a id="btn-api-next" href="javascript:;">next()</a> |
-<a id="btn-api-previous" href="javascript:;">previous()</a> |
-<a id="btn-api-shuffle" href="javascript:;">shuffle()</a> |
-<a id="btn-api-add" href="javascript:;">add()</a> |
-<a id="btn-api-remove" href="javascript:;">remove()</a> |
-<a id="btn-api-remove-2" href="javascript:;">remove(2)</a> |
-<a id="btn-api-clear" href="javascript:;">clear()</a> |
-<a id="btn-api-parse" href="javascript:;">parse()</a><br>
-
-<a id="btn-api-setViewState-minimized" href="javascript:;">setViewState('minimized', 400)</a> |
-<a id="btn-api-setViewState-maximized" href="javascript:;">setViewState('maximized', 400)</a> |
-<a id="btn-api-setViewState-hidden" href="javascript:;">setViewState('hidden', 400)</a><br>
-
-<a id="btn-api-showPlaylist" href="javascript:;">showPlaylist()</a> |
-<a id="btn-api-showPlaylist-false" href="javascript:;">showPlaylist(false)</a>
+<a href='add_song.php'>Add Song</a>
 <br><br>
 
 <?php
 while($count>0){
 	$row=mysqli_fetch_row($fetch_data);
-	echo "$row[1] <button onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\")'>Add to Queue</button> <a href='$row[2]' title='$row[1]' data-artist='$row[3]' onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\,\"$row[4]\")'>Play</a> <br><br>";
+	echo "$row[1] <button onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",0)'>Add to Queue</button> <a href='$row[2]' title='$row[1]' data-artist='$row[3]' onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",1)'>Play</a> <br><br>";
 	$count-=1;
 }
 ?>
