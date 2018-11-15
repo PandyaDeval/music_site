@@ -2,7 +2,7 @@
 session_start();
 $username=$_SESSION['username'];
 if($username!='admin'){
-	echo "<script>location='test3.php';</script>";
+	echo "<script>location='home.php';</script>";
 }
 $con = mysqli_connect("localhost","root","") or die("Cannot connect to server.");
 mysqli_select_db($con,"music") or die("Cannot Connect to db");
@@ -93,9 +93,6 @@ $fetch_data=mysqli_query($con,$fetch_qry);
 			jpjb.play();
 		  }	
 	  }
-	function play(title,link,artist){
-		var jpjb=window.jpjb;
-	}
 </script>
 </head>
 
@@ -104,13 +101,13 @@ $fetch_data=mysqli_query($con,$fetch_qry);
 <article>
 
 
-<a href='add_song.php'>Add Song</a>
+<a href='add_song.php'>Add Song</a> <a href='users.php'>Users</a>
 <br><br>
 
 <?php
 while($count>0){
 	$row=mysqli_fetch_row($fetch_data);
-	echo "$row[1] <button onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",0)'>Add to Queue</button> <a href='$row[2]' title='$row[1]' data-artist='$row[3]' onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",1)'>Play</a> <br><br>";
+	echo "$row[1] <button onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",0)'>Add to Queue</button> <a href='$row[2]' title='$row[1]' data-artist='$row[3]' onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",1)'>Play</a> <a href='edit.php?id=$row[0]'>Edit Song</a> <a href='delete.php?id=$row[0]'>Delete Song</a> <br><br>";
 	$count-=1;
 }
 ?>
