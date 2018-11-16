@@ -18,21 +18,50 @@ $fetch_data=mysqli_query($con,$fetch_qry);
 ?>
 
 <html>
-<body>
 
-<a href='admin_home.php'>Admin Home</a><br><br>
+<style>
+#nav_bar{
+    overflow: hidden;
+    background-color: #554f4f85;
+    width: 100%;
+    z-index:0;
+    padding-bottom: 25px;
+}
 
-<table>
+a{
+	color:white;
+	text-decoration:none;
+}
+
+a:hover{
+         color:#da00aa;
+   }
+
+</style>
+
+<body style='background: black;color:white'>
+<div id="nav_bar">
+      <div id="logo" style="padding-right: 55%;float:left;margin-top:10px"><font face="Bunch Blossoms Personal Use" size="6px"><a href="test3.php">Muzikk&hearts;</a></font></div>
+      <a class="logout"style="float:right;margin-top:15px;font-size:125%;margin-right:10px" href="logout.php">Log Out</a>
+</div>
+<div style='padding:15px;'><a href='admin_home.php'>Back</a></div>
+<div style='font-size:150%'><center>All Users</center></div>
+<table style='margin-left:20%;width:75%;margin-top:2%'>
 <tr>
-	<td>Name</td>
-	<td>Email</td>
-	<td>Username</td>
-	<td>Password</td>
+	<td style='width:20%;padding-bottom: 15px'><b>Name</b></td>
+	<td style='width:30%;padding-bottom: 15px'><b>Email</b></td>
+	<td style='width:20%;padding-bottom: 15px'><b>Username</b></td>
+	<td style='width:30%padding-bottom: 15px'><b>Password</b></td>
 </tr>
 <?php
 while($count>0){
 	$row=mysqli_fetch_row($fetch_data);
-	echo "<tr><td>$row[1]</td><td>$row[3]</td><td>$row[2]</td><td>$row[3]</td></tr>";
+	echo "<tr>
+	<td style='padding-bottom:10px'>$row[1]</td>
+	<td style='padding-bottom:10px'>$row[3]</td>
+	<td style='padding-bottom:10px'>$row[2]</td>
+	<td style='padding-bottom:10px'>$row[3]</td>
+	</tr>";
 	$count-=1;
 }
 ?>
