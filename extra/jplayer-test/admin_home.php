@@ -75,24 +75,32 @@ $fetch_data=mysqli_query($con,$fetch_qry);
       $('#btn-api-showPlaylist-false').on('click', function(){ jpjb.showPlaylist(false); });
 	  
    });
-   function add_to_queue(title,link,artist,album_art,play){
-		  var jpjb=window.jpjb;
-		  if(quelen==-1){
-			  jpjb.clear();
-		  }
-		  jpjb.add({
-			  title: title,
-			  artist: artist,
-			  mp3: link,
-			  poster: album_art
-		  });
-		  document.body.style="background:url("+album_art+") fixed;background-size:100%;";
-		  quelen+=1;
-		  if(play==1){
-			jpjb.select(quelen);
-			jpjb.play();
-		  }	
-	  }
+   function add_to_queue(title,link,artist){
+        var jpjb=window.jpjb;
+      if(quelen==-1){
+           jpjb.clear();
+       }
+        jpjb.add({
+           title: title,
+           artist: artist,
+           mp3: link,
+        });
+      quelen+=1;
+     }
+     function add_album_art(title,link,artist,album_art){
+        var jpjb=window.jpjb;
+      if(quelen==-1){
+           jpjb.clear();
+      }
+        jpjb.add({
+           title: title,
+           artist: artist,
+           mp3: link,
+        });
+      quelen+=1;
+      jpjb.select(quelen);
+        document.body.style="background:url("+album_art+") no-repeat ;background-size:100%;";
+     }
 </script>
 
 <style>
@@ -206,7 +214,7 @@ while($count>0){
 	$row=mysqli_fetch_row($fetch_data);
 	echo "<tr> <td style='width:20%'>$row[1]</td><td style='width:15%'>By $row[3]</td>
                <td style='width:20%'><button class='queue_button button1' onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\")'>Add to Queue</button></td>
-                <td><a href='$row[2]' title='$row[1]' data-artist='$row[3]' onclick='add_to_queue(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\",1)'>Play</a></td>
+                <td><a href='$row[2]' title='$row[1]' data-artist='$row[3]' onclick='add_album_art(\"$row[1]\",\"$row[2]\",\"$row[3]\",\"$row[4]\")'>Play</a></td>
                <td style='width:20%;padding-left:4%'><a href='edit.php?id=$row[0]' class='queue_button button3'>Edit Song</a> </td>
                <td style='width:30%'><a href='delete.php?id=$row[0]' class='queue_button button2'>Delete Song</a></td>
          </tr>";
